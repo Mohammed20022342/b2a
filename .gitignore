@@ -1,0 +1,8 @@
+ECHO is on.
+*.pyc
+__pycache__/
+db.sqlite3
+.env
+venv/
+staticfiles/
+media/

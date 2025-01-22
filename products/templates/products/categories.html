@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="{% static 'css/categories.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="logo"></a>
+        </div>
+        <div class="search-bar">
+            <form method="get" action="{% url 'product_list' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        <div class="user-icons">
+            <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </a>
+            <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}">Home</a></li>
+            {% for category in categories %}
+            <li><a href="{% url 'product_by_category' category_id=category.id %}" 
+                   class="{% if category.name == request.GET.category %}active{% endif %}">
+                   {{ category.name }}
+            </a></li>
+            {% endfor %}
+            <li><a href="{% url 'contact' %}">Funding</a></li>
+            <li><a href="{% url 'contact' %}">Projects</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+    </nav>
+    
+
+<!-- Filter Section -->
+<form method="get" action="{% url 'product_by_category' category_id=category.id %}">
+    <!-- Price Filter -->
+    <div class="filter-group">
+        <label for="price">Price:</label>
+        <input type="range" id="price" name="price" min="0" max="1000" step="10" value="{{ request.GET.price|default:'500' }}" oninput="updatePriceValue(this)">
+        <span id="price-value">${{ request.GET.price|default:'500' }}</span>
+    </div>
+
+    <!-- Electronics Filters (Visible only if 'electronics' is selected) -->
+    <div class="filter-container" id="electronics-filters" style="display: {% if request.GET.category == 'electronics' or category.name == 'Electronics' %}block{% else %}none{% endif %};">
+        <div class="filter-group">
+            <label for="brand">Brand:</label>
+            <select id="brand" name="brand">
+                <option value="">Select Brand</option>
+                <option value="Dell" {% if 'Dell' == request.GET.brand %}selected{% endif %}>Dell</option>
+                <option value="Acer" {% if 'Acer' == request.GET.brand %}selected{% endif %}>Acer</option>
+                <option value="Hp" {% if 'Hp' == request.GET.brand %}selected{% endif %}>Hp</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Clothing Filters (Visible only if 'clothing' is selected) -->
+    <div class="filter-container" id="clothing-filters" style="display: {% if request.GET.category == 'clothes' or category.name == 'Clothes' %}block{% else %}none{% endif %};">
+        <div class="filter-group">
+            <label for="size">Size:</label>
+            <select id="size" name="size">
+                <option value="">Select Size</option>
+                <option value="small" {% if 'small' == request.GET.size %}selected{% endif %}>Small</option>
+                <option value="medium" {% if 'medium' == request.GET.size %}selected{% endif %}>Medium</option>
+                <option value="large" {% if 'large' == request.GET.size %}selected{% endif %}>Large</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="color">Color:</label>
+            <select id="color" name="color">
+                <option value="">Select Color</option>
+                <option value="red" {% if 'red' == request.GET.color %}selected{% endif %}>Red</option>
+                <option value="blue" {% if 'blue' == request.GET.color %}selected{% endif %}>Blue</option>
+                <option value="green" {% if 'green' == request.GET.color %}selected{% endif %}>Green</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Apply Filters Button -->
+    <div class="filter-group">
+        <button type="submit" class="apply-filters-btn">Apply Filters</button>
+    </div>
+</form>
+
+<script>
+    function updatePriceValue(slider) {
+        var priceValue = document.getElementById('price-value');
+        priceValue.textContent = '$' + slider.value;
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <main>
+        <section class="products-grid">
+            {% for product in products %}
+                <div class="product-item">
+                    <img src="{{ product.detail_image_1.url }}" alt="{{ product.title }}">
+                    <h3>{{ product.title }}</h3>
+                    <p>Price: ${{ product.price }}</p>
+                    <a href="{% url 'product_detail' product.pk %}">View Product</a>
+                </div>
+            {% empty %}
+                <p>No products available in this category.</p>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My E-Commerce Store</p>
+        <p><a href="privacy_policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </footer>
+</body>
+
+<script src="{% static 'js/filters.js' %}"></script>
+
+</html>

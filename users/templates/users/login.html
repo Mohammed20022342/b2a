@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="logo"></a>
+        </div>
+        <div class="search-bar">
+            <form method="get" action="{% url 'product_list' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="user-icons">
+            <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </a>
+            <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}">Home</a></li>
+            {% for category in categories %}
+                <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+            <li><a href="{% url 'contact' %}">Funding</a></li>
+            <li><a href="{% url 'contact' %}">Projects</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="auth-container">
+            <h1>Login</h1>
+            <div class="login-form" id="login-form">
+                <form action="{% url 'login_view' %}" method="POST">
+                    {% csrf_token %}
+                    <label for="login-number-name">Name/Number:</label>
+                    <input type="text" id="login-number-name" name="username_or_phone" required>
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" name="password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="{% url 'register_view' %}">Register here</a></p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 My E-Commerce Store</p>
+        <p><a href="privacy_policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    </footer>
+</body>
+</html>

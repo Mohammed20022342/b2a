@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="logo"></a>
+        </div>
+        <div class="search-bar">
+            <form method="get" action="{% url 'product_list' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="user-icons">
+            <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </a>
+            <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}">Home</a></li>
+            {% for category in categories %}
+                <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+            <li><a href="{% url 'contact' %}">Funding</a></li>
+            <li><a href="{% url 'contact' %}">Projects</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <section class="profile-section">
+        <h2>Welcome, {{ user.username }}</h2>
+        <p>Email: {{ user.email }}</p>
+        <p>Phone Number: {{ user.phone_number }}</p>
+    
+        <div class="profile-update-container">
+            <h3>Update Profile</h3>
+            <form id="profileUpdateForm" method="post" action="{% url 'update_profile' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" value="{{ user.userprofile.address }}" required>
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    
+        <div class="password-change-container">
+            <h3>Change Password</h3>
+            <form id="passwordChangeForm" method="post" action="{% url 'change_password' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="current_password">Current Password</label>
+                    <input type="password" id="current_password" name="current_password" required>
+                </div>
+                <div>
+                    <label for="new_password">New Password</label>
+                    <input type="password" id="new_password" name="new_password" required>
+                </div>
+                <div>
+                    <label for="confirm_password">Confirm New Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <button type="submit">Update Password</button>
+            </form>
+        </div>
+
+        <div>
+            <a href="{% url 'logout_view' %}">
+                <button type="button">Log Out</button>
+            </a>
+        </div>
+    
+        <h3>Your Orders</h3>
+        {% if orders %}
+            <ul>
+                {% for order in orders %}
+                    <li>Order #{{ order.id }} - Total: ${{ order.total }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no orders yet.</p>
+        {% endif %}
+    </section>

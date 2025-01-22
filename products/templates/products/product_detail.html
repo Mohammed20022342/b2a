@@ -1,0 +1,138 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+    <div class="logo">
+        <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="logo"></a>
+    </div>
+    <div class="search-bar">
+        <form method="get" action="{% url 'product_list' %}">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="user-icons">
+        <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+            {% if user.is_authenticated %}
+                {{ user.username }}
+            {% else %}
+                Guest
+            {% endif %}
+        </a>
+        <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
+</header>
+
+<!-- Navigation Section -->
+<nav>
+    <ul>
+        <li><a href="{% url 'product_list' %}">Home</a></li>
+        {% for category in categories %}
+            <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+        {% endfor %}
+        <li><a href="{% url 'contact' %}">Funding</a></li>
+        <li><a href="{% url 'contact' %}">Projects</a></li>
+        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+    </ul>
+</nav>
+
+<!-- Product Details Section -->
+<main class="product-details">
+    <section class="product-gallery">
+        <div class="main-image">
+            <img 
+                id="main-image" 
+                src="{{ product.detail_image_1.url }}" 
+                alt="{{ product.title }}" 
+                class="main-display-image"
+            >
+        </div>
+        <div class="thumbnail-images">
+            {% if product.detail_image_1 %}
+                <img 
+                src="{{ product.detail_image_1.url }}" 
+                alt="{{ product.title }} Image 1" 
+                onclick="changeMainImage('{{ product.detail_image_1.url }}')" 
+                class="thumbnail"
+                >
+            {% endif %}
+            {% if product.detail_image_2 %}
+                <img 
+                src="{{ product.detail_image_2.url }}" 
+                alt="{{ product.title }} Image 2" 
+                onclick="changeMainImage('{{ product.detail_image_2.url }}')" 
+                class="thumbnail"
+                >
+            {% endif %}
+            {% if product.detail_image_3 %}
+                <img 
+                src="{{ product.detail_image_3.url }}" 
+                alt="{{ product.title }} Image 3" 
+                onclick="changeMainImage('{{ product.detail_image_3.url }}')" 
+                class="thumbnail"
+                >
+            {% endif %}
+        </div>
+        <div class="reviews">
+            <h3>Customer Reviews</h3>
+            {% for review in reviews %}
+                <p>Rating:
+                    {% for _ in "12345"|slice:":review.rating" %}
+                        ⭐
+                    {% endfor %}
+                </p>
+                <p>{{ review.comment }}</p>
+                <p>— {{ review.user.username }}, {{ review.created_at|date:"F j, Y" }}</p>
+            {% empty %}
+                <p>No reviews yet. Be the first to review this product!</p>
+            {% endfor %}
+        </div>
+        
+        {% if user.is_authenticated %}
+            <div class="add-review">
+                <h3>Add Your Review</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
+        {% else %}
+            <p><a href="{% url 'login_view' %}">Log in</a> to leave a review.</p>
+        {% endif %}
+    </section>
+
+    <section class="product-info">
+        <h1>{{ product.title }}</h1>
+        <p class="price">${{ product.price }}</p>
+        <p class="description">
+            {{ product.description }}
+        </p>
+        <form action="{% url 'add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="addtocart">Add to Cart</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 My E-Commerce Store</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+</body>
+
+<script src="{% static 'js/product_detail.js' %}"></script>
+</html>

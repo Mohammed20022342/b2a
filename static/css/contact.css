@@ -1,0 +1,177 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #150e11;
+}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    color: #fe5757;
+}
+
+header .logo img {
+    margin: 5px 0;
+    width: 100px;
+    height: auto;
+}
+
+header .search-bar {
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between input and button */
+}
+
+header .search-bar input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    flex: 1; /* Allow input to take remaining space */
+}
+
+header .search-bar button {
+    padding: 10px 15px; /* Add padding for the button */
+    background-color: #fe5757; /* Button background color */
+    color: white; /* Text color for the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Round corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+header .user-icons a {
+    margin-left: 20px;
+    color: #fe5757;
+    text-decoration: none;
+}
+
+header .search-bar button:hover {
+    background-color: #ba22a1; /* Change color on hover */
+}
+
+header .user-icons i {
+    font-size: 32px; /* Increase this value for larger icons */
+}
+
+nav {
+    background-color: #fe5757;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contact-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.contact-form-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.contact-form-container h2 {
+    margin-bottom: 20px;
+    color: #fe5757;
+    text-align: center;
+    font-size: 24px;
+}
+
+.contact-form-container form div {
+    margin-bottom: 20px;
+}
+
+.contact-form-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.contact-form-container input[type="text"],
+.contact-form-container textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.contact-form-container textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.contact-form-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #fe5757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+.contact-form-container button:hover {
+    background-color: #ba22a1;
+}
+
+p {
+    margin-top: 10px;
+}
+
+p a {
+    color: #fe5757;
+    text-decoration: none;
+}
+
+footer {
+    background-color: #150e11;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+footer a {
+    color: #ffa200;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .contact-form-container {
+        padding: 20px;
+    }
+}

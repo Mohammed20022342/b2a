@@ -1,0 +1,230 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #150e11;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    color: #fe5757;
+}
+
+header .logo img {
+    margin: 5px 0;
+    width: 100px;
+    height: auto;
+}
+
+header .search-bar {
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between input and button */
+}
+
+header .search-bar input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    flex: 1; /* Allow input to take remaining space */
+}
+
+header .search-bar button {
+    padding: 10px 15px; /* Add padding for the button */
+    background-color: #fe5757; /* Button background color */
+    color: white; /* Text color for the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Round corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+header .user-icons a {
+    margin-left: 20px;
+    color: #fe5757;
+    text-decoration: none;
+}
+
+header .search-bar button:hover {
+    background-color: #ba22a1; /* Change color on hover */
+}
+
+header .user-icons i {
+    font-size: 32px; /* Increase this value for larger icons */
+}
+
+nav {
+    background-color: #ffa200;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: white !important;
+    text-decoration: none;
+    font-weight: bold !important;
+}
+
+button {
+    background-color: #fe5757;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+.info-container {
+    display: flex;
+    align-items: flex-start; /* Align items to the start */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.info, .price-adjustment {
+    flex: 1; /* Make both sections take equal space */
+    padding: 10px;
+}
+
+.separator {
+    width: 2px; /* Width of the separator line */
+    background-color: black; /* Color of the separator line */
+    margin: 0 20px; /* Space around the line */
+    height: auto; /* Let it adapt to the height of the sections */
+}
+
+h2 {
+    margin-top: 0; /* Remove default margin for h2 */
+}
+
+.offers, .shipping-info, .products {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.offer-item, .product-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ba22a1;
+    border-radius: 5px;
+}
+
+.products{
+    margin-top: 30px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 3 products per row */
+    gap: 20px; /* Space between products */
+    padding: 20px;
+    margin: 0;
+}
+
+.product-item h3 {
+    margin: 0;
+    color: #ba22a1;
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+footer {
+    background-color: #150e11;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: #ffa200;
+    text-decoration: none;
+}
+
+
+input[type="text"]{
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #fe5757;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.offer-products-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Display 5 products per row */
+    gap: 20px; /* Space between items */
+    padding: 20px;
+    margin: 0;
+}
+
+.offer-products-grid .product-item {
+    border: 1px solid #ba22a1;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.offer-products-grid .product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.offer-products-grid .product-item h3 {
+    color: #ba22a1;
+    margin: 10px 0;
+}
+
+.offer-products-grid .product-item a {
+    color: #fe5757;
+    text-decoration: none;
+}
+

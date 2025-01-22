@@ -1,0 +1,97 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="logo"></a>
+        </div>
+        <div class="search-bar">
+            <form method="get" action="{% url 'product_list' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="user-icons">
+            <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    Guest
+                {% endif %}
+            </a>
+            <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}">Home</a></li>
+            {% for category in categories %}
+                <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+            <li><a href="{% url 'contact' %}">Funding</a></li>
+            <li><a href="{% url 'contact' %}">Projects</a></li>
+            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Cart Section -->
+    <main>
+        <h1>Your Shopping Cart</h1>
+        
+        {% if items %}
+        <section class="cart-items">
+            {% for item in items %}
+            <div class="cart-item">
+                <img src="{{ item.product.detail_image_1.url }}" alt="{{ item.product.title }}">
+                <div class="item-details">
+                    <h3>{{ item.product.title }}</h3>
+                    <p>Price: ${{ item.product.price }}</p>
+                    <form action="{% url 'update_cart_item' item.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="quantity-controls">
+                            <button type="submit" name="action" value="decrease" {% if item.quantity == 1 %}disabled{% endif %}>-</button>
+                            <span>{{ item.quantity }}</span>
+                            <button type="submit" name="action" value="increase">+</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="item-total">
+                    <p>Total: ${{ item.get_total_price }}</p>
+                    <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-item">Remove</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+
+        <div class="cart-summary">
+            <h2>Cart Summary</h2>
+            <p>Total Items: {{ total_quantity }}</p>
+            <p>Total Price: ${{ total_price }}</p>
+            <button class="checkout">Proceed to Checkout</button>
+        </div>
+        {% else %}
+        <p>Your cart is empty. <a href="{% url 'product_list' %}">Continue shopping</a>.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My E-Commerce Store</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+</body>
+</html>

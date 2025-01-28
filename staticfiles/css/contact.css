@@ -59,7 +59,7 @@ header .user-icons i {
 }
 
 nav {
-    background-color: #ffa200;
+    background-color: #fe5757;
     padding: 10px 0;
 }
 
@@ -161,10 +161,11 @@ footer {
     color: white;
     text-align: center;
     padding: 15px 0;
-    position: relative;
-    bottom: 0;
-    width: 100%;
+    position: relative; /* Ensure footer stays at the bottom */
+    bottom: 0; /* Align to the bottom */
+    width: 100%; /* Full width of the page */
 }
+
 footer a {
     color: #ffa200;
     text-decoration: none;
@@ -173,5 +174,108 @@ footer a {
 @media (max-width: 600px) {
     .contact-form-container {
         padding: 20px;
+    }
+
+    body {
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+        width: 100%;
+    }
+
+    header .logo img {
+        margin: 5px 0;
+        width: 80px;
+        height: auto;
+    }
+
+    header .user-icons i {
+        font-size: 20px; /* Decrease the icon size on small screens */
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+        display: block; /* Show hamburger button */
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #fe5757; /* Set visible color for the button */
+        position: relative;
+        right: 0; /* Position the button in the top-right corner */
+        z-index: 10; /* Ensure it stays above other elements */
+    }
+
+    /* Hide navigation by default */
+    nav {
+        max-height: 0; /* Collapsed menu */
+        overflow: hidden; /* Hide overflowing items */
+        background-color: transparent; /* Remove background when collapsed */
+        transition: max-height 0.3s ease, background-color 0.3s ease;
+    }
+
+    /* Show navigation when toggled */
+    nav.open {
+        max-height: 300px; /* Adjust based on menu size */
+        background-color: #fe5757; /* Add background when expanded */
+    }
+
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+    
+    .search-bar {
+        display: none !important;
+    }
+
+    #search-icon {
+        display: block; /* Make the icon visible */
+        font-size: 24px;
+        color: #fe5757;
+        cursor: pointer;
+        margin-right: 20px;
+        position: relative;
+        transition: transform 0.3s ease; /* Add smooth transition for transform */
+    }
+
+    .search-bar.open {
+        display: flex !important; /* Make the search bar appear */
+        position: absolute;
+        top: 80px; /* Adjust position below the header */
+        width: 60%; /* Width of the search bar */
+        max-width: 300px; /* Maximum width */
+        background-color: white;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        border-radius: 5px;
+        opacity: 0; /* Initially invisible */
+        transform: scaleX(0); /* Start with no width */
+        transform-origin: left center; /* Animate from the left */
+        transition: opacity 0.3s ease, transform 0.3s ease; /* Transition for opacity and transform */
+    }
+
+    .search-bar.open.show {
+        opacity: 1; /* Make it visible */
+        transform: scaleX(1); /* Expand the search bar horizontally */
+    }
+
+    
+    /* Footer remains untouched but properly positioned */
+    footer {
+        background-color: #150e11;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        position: relative;
+        bottom: 0;
+        width: 100%;
     }
 }

@@ -1,20 +1,19 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.querySelector(".hamburger");
+    const nav = document.querySelector("nav");
 
-document.addEventListener("DOMContentLoaded", function() {
-    const loginForm = document.getElementById("login-form");
-    const registerForm = document.getElementById("register-form");
-    const showRegisterLink = document.getElementById("show-register");
-    const showLoginLink = document.getElementById("show-login");
-
-    showRegisterLink.addEventListener("click", function(event) {
-        event.preventDefault();
-        loginForm.style.display = "none";
-        registerForm.style.display = "block";
-    });
-
-    showLoginLink.addEventListener("click", function(event) {
-        event.preventDefault();
-        registerForm.style.display = "none";
-        loginForm.style.display = "block";
+    hamburger.addEventListener("click", () => {
+        nav.classList.toggle("open");
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const searchIcon = document.querySelector(".search-icon");
+    const searchBar = document.querySelector(".search-bar");
+
+    // Toggle search bar visibility for small screens
+    searchIcon.addEventListener("click", () => {
+        searchBar.classList.toggle("open");
+        searchBar.classList.toggle("show"); // Ensure the transition works
+    });
+});

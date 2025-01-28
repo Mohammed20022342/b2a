@@ -23,6 +23,9 @@
             <button type="submit">Search</button>
         </form>
     </div>
+    
+    <i id='search-icon' class="fa fa-search search-icon"></i> <!-- Search icon -->
+
     <div class="user-icons">
         <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
             {% if user.is_authenticated %}
@@ -33,7 +36,10 @@
         </a>
         <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
+    <button class="hamburger">&#9776;</button> <!-- Hamburger menu -->
+
 </header>
+
 
 <!-- Navigation Section -->
 <nav>
@@ -135,4 +141,6 @@
 </body>
 
 <script src="{% static 'js/product_detail.js' %}"></script>
+<script src="{% static 'js/accounts.js' %}"></script>
+
 </html>

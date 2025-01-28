@@ -21,6 +21,9 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        
+        <i id='search-icon' class="fa fa-search search-icon"></i> <!-- Search icon -->
+
         <div class="user-icons">
             <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
                 {% if user.is_authenticated %}
@@ -31,13 +34,20 @@
             </a>
             <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
+        <button class="hamburger">&#9776;</button> <!-- Hamburger menu -->
+
     </header>
 
+
+    <!-- Navigation -->
     <nav>
         <ul>
             <li><a href="{% url 'product_list' %}">Home</a></li>
             {% for category in categories %}
-                <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+            <li><a href="{% url 'product_by_category' category_id=category.id %}" 
+                   class="{% if category.name == request.GET.category %}active{% endif %}">
+                   {{ category.name }}
+            </a></li>
             {% endfor %}
             <li><a href="{% url 'contact' %}">Funding</a></li>
             <li><a href="{% url 'contact' %}">Projects</a></li>
@@ -110,4 +120,6 @@
     </footer>
 
 </body>
+<script src="{% static 'js/accounts.js' %}"></script>
+
 </html>

@@ -19,6 +19,9 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        
+        <i id='search-icon' class="fa fa-search search-icon"></i> <!-- Search icon -->
+
         <div class="user-icons">
             <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
                 {% if user.is_authenticated %}
@@ -29,6 +32,8 @@
             </a>
             <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
+        <button class="hamburger">&#9776;</button> <!-- Hamburger menu -->
+
     </header>
 
     <!-- Navigation -->
@@ -36,7 +41,10 @@
         <ul>
             <li><a href="{% url 'product_list' %}">Home</a></li>
             {% for category in categories %}
-                <li><a href="{% url 'product_by_category' category_id=category.id %}">{{ category.name }}</a></li>
+            <li><a href="{% url 'product_by_category' category_id=category.id %}" 
+                   class="{% if category.name == request.GET.category %}active{% endif %}">
+                   {{ category.name }}
+            </a></li>
             {% endfor %}
             <li><a href="{% url 'contact' %}">Funding</a></li>
             <li><a href="{% url 'contact' %}">Projects</a></li>
@@ -47,7 +55,7 @@
     <main>
         <div class="auth-container">
             <h1>Login</h1>
-            <div class="login-form" id="login-form">
+            <div class="login-form">
                 <form action="{% url 'login_view' %}" method="POST">
                     {% csrf_token %}
                     <label for="login-number-name">Name/Number:</label>
@@ -60,9 +68,11 @@
             </div>
         </div>
     </main>
+    
     <footer>
         <p>&copy; 2024 My E-Commerce Store</p>
         <p><a href="privacy_policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
     </footer>
 </body>
+<script src="{% static 'js/accounts.js' %}"></script>
 </html>

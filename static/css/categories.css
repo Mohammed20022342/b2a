@@ -80,6 +80,22 @@ nav ul li a {
     text-decoration: none;
     font-weight: bold;
 }
+
+.search-bar {
+    display: flex; /* Keep it visible on larger screens */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between input and button */
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+#search-icon {
+    display: none; /* Hide search icon on larger screens */
+}
+
+.hamburger{
+    display: none;
+}
+
 /* Filter Section */
 .filter-container {
     padding: 20px;

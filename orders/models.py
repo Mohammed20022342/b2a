@@ -13,14 +13,17 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey("products.Product", on_delete=models.PROTECT)  # Use string reference
+    product = models.ForeignKey("products.Product", on_delete=models.PROTECT)  
     quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Stores price at purchase time
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
         if self.quantity > self.product.stock_quantity:
             raise ValueError("Insufficient stock for this product")
+        
         super().save(*args, **kwargs)
+        
         # Deduct stock when an order item is created
         self.product.stock_quantity -= self.quantity
+        self.product.purchase_count += self.quantity  # Increase the purchase count
         self.product.save()

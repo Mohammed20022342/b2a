@@ -88,7 +88,7 @@
             <h2>Cart Summary</h2>
             <p>Total Items: {{ total_quantity }}</p>
             <p>Total Price: ${{ total_price }}</p>
-            <button class="checkout">Proceed to Checkout</button>
+            <button class="checkout" id="checkout-button">Proceed to Checkout</button>
         </div>
         {% else %}
         <p>Your cart is empty. <a href="{% url 'product_list' %}">Continue shopping</a>.</p>
@@ -101,5 +101,28 @@
     </footer>
 </body>
 <script src="{% static 'js/accounts.js' %}"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}");  // Fix: Using the variable from context
+
+        document.querySelector(".checkout").addEventListener("click", function () {
+            fetch("{% url 'create_checkout_session' %}", {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.json())
+            .then(session => {
+                if (session.error) {
+                    alert(session.error);
+                } else {
+                    stripe.redirectToCheckout({ sessionId: session.id });
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+</script>
+
 
 </html>

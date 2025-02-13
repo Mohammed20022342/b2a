@@ -1,7 +1,10 @@
 from django.db import models
 from products.models import Product
+from users.models import UserProfile
+
 
 class Cart(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="carts")
     session_id = models.CharField(max_length=255, unique=True)
 
 class CartItem(models.Model):

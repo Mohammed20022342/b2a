@@ -4,30 +4,37 @@ from orders.models import Order
 from django.shortcuts import render, redirect
 
 
-class UserProfile(AbstractUser):
-    phone_number = models.CharField(max_length=20, blank=True)
-    address = models.TextField(blank=True)
-    phone_verified = models.BooleanField(default=False)
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db import models
 
-    # Specify related_name to avoid clashes
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='userprofile_set',  # Changed from 'user_set' to 'userprofile_set'
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-    
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='userprofile_set',  # Changed from 'user_set' to 'userprofile_set'
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email is required")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(email, password, **extra_fields)
+
+class UserProfile(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'  # ✅ Use email as the primary identifier
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.username
+        return self.email
 
 class Address(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="addresses")

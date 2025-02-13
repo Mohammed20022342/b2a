@@ -11,70 +11,83 @@ def register_view(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)  # Create user object but don't save it yet
-            user.phone_verified = False  # Set initial phone verification status
-            user.set_password(form.cleaned_data['password'])  # Set password correctly
-            user.save()  # Save the user to the database
-
-            # Proceed with OTP
-            request.session['phone_number'] = user.phone_number  # Save phone number for OTP
-            return redirect('send_otp')  # Redirect to send OTP
+            user = form.save(commit=False)
+            user.email_verified = False  # ✅ Track email verification
+            user.set_password(form.cleaned_data['password'])  # Hash password
+            user.save()
+            request.session['email'] = user.email  # ✅ Store email for OTP
+            return redirect('send_otp')  # Redirect to OTP verification
 
     else:
-        form = RegistrationForm()  # Instantiate a blank form if not POST
+        form = RegistrationForm()
 
     return render(request, 'users/register.html', {'form': form, 'page': 'register'})
 
+
+from django.core.mail import send_mail
+import random
+
 def send_otp(request):
-    phone_number = request.session.get('phone_number')
-    if not phone_number:
-        return redirect('register')  # If no phone, redirect to register
+    email = request.session.get('email')  # Retrieve email from session
+    if not email:
+        return redirect('register_view')  # Redirect if no email found
 
-    otp = random.randint(1000, 9999)
-    request.session['otp'] = otp  # Save OTP in session
+    otp = random.randint(1000, 9999)  # Generate a 4-digit OTP
+    request.session['otp'] = otp  # Store OTP in session
 
-    # Here you would send the OTP using an SMS service
-    print(f"OTP for {phone_number}: {otp}")  # For testing purposes
+    # ✅ Send OTP via Email
+    send_mail(
+        subject="Your OTP Code",
+        message=f"Your OTP code is: {otp}",
+        from_email="b2a.org@gmail.com",  # Replace with your Gmail
+        recipient_list=[email],  # Send to the user's email
+        fail_silently=False,
+    )
 
-    return render(request, 'users/otp.html')
+    return render(request, 'users/otp.html')  # Show OTP input page
 
 def verify_otp(request):
     if request.method == 'POST':
-        entered_otp = request.POST.get('otp')
-        actual_otp = request.session.get('otp')
+        entered_otp = request.POST.get('otp')  # Get OTP from form
+        actual_otp = request.session.get('otp')  # Get stored OTP
 
-        if str(entered_otp) == str(actual_otp):
-            phone_number = request.session.get('phone_number')
-            user = UserProfile.objects.get(phone_number=phone_number)
-            user.phone_verified = True
+        if str(entered_otp) == str(actual_otp):  # Compare OTPs
+            email = request.session.get('email')
+            user = UserProfile.objects.get(email=email)
+            user.email_verified = True  # ✅ Mark email as verified
             user.save()
-            login(request, user)
-            return redirect('../..')
+            login(request, user)  # Log the user in
+            return redirect('profile_view')  # Redirect to profile page
 
     return render(request, 'users/otp.html', {'error': 'Invalid OTP'})
+
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()  # Get the custom User model
 
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(
-                request, 
-                username=form.cleaned_data['username_or_phone'], 
-                password=form.cleaned_data['password']
-            )
-            if user:
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            try:
+                user = User.objects.get(email=email)  # Get user by email
+            except User.DoesNotExist:
+                user = None
+
+            if user is not None and user.check_password(password):  # Check password manually
                 login(request, user)
+                return redirect('profile_view')
 
-                # Check if the user is an admin and redirect to the admin interface
-                if user.is_staff:
-                    return redirect('/admin/')  # Redirect to the admin interface
-                return redirect('../..')  # Or any other page you want non-admin users to go to
-
-            messages.error(request, 'Invalid credentials')
-            return render(request, 'users/login.html', {'error': 'Invalid credentials', 'page': 'login'})
+            messages.error(request, 'Invalid email or password')  # Show error message
 
     form = LoginForm()
     return render(request, 'users/login.html', {'form': form, 'page': 'login'})
+
 
 
 

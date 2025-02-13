@@ -66,6 +66,18 @@
         <span id="price-value">${{ request.GET.price|default:'500' }}</span>
     </div>
 
+    <div class="filter-container">
+        <div class="filter-group">
+            <label for="sort">Sort By:</label>
+            <select id="sort" name="sort">
+                <option value="">Select</option>
+                <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Price: High to Low</option>
+                <option value="most_purchased" {% if request.GET.sort == "most_purchased" %}selected{% endif %}>Most Purchased</option>
+            </select>
+        </div>
+    </div>
+
     <!-- Electronics Filters (Visible only if 'electronics' is selected) -->
     <div class="filter-container" id="electronics-filters" style="display: {% if request.GET.category == 'electronics' or category.name == 'Electronics' %}block{% else %}none{% endif %};">
         <div class="filter-group">
@@ -133,7 +145,7 @@
 
     <footer>
         <p>&copy; 2024 My E-Commerce Store</p>
-        <p><a href="privacy_policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+        <p><a href="">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
     </footer>
 </body>
 

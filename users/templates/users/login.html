@@ -58,8 +58,9 @@
             <div class="login-form">
                 <form action="{% url 'login_view' %}" method="POST">
                     {% csrf_token %}
-                    <label for="login-number-name">Name/Number:</label>
-                    <input type="text" id="login-number-name" name="username_or_phone" required>
+                    <label for="login-email">Email:</label> <!-- ✅ Changed label -->
+                    <input type="email" id="login-email" name="email" required> <!-- ✅ Changed input field -->
+                    
                     <label for="login-password">Password:</label>
                     <input type="password" id="login-password" name="password" required>
                     <button type="submit">Login</button>

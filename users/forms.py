@@ -6,8 +6,9 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password']  # ✅ Use email instead of phone number
+
 
 class LoginForm(forms.Form):
-    username_or_phone = forms.CharField()
+    email = forms.EmailField()  # ✅ Use email instead of username
     password = forms.CharField(widget=forms.PasswordInput)

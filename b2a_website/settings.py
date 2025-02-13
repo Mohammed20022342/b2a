@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-bkllt2#%0)mli99im23$oiqsyni3^g+6rrwvsk0o$cfq6d(2#r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mohammed2092.pythonanywhere.com']
+ALLOWED_HOSTS = ['mohammed2092.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -53,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Add this middleware
+
 ]
 
 ROOT_URLCONF = 'b2a_website.urls'
@@ -141,8 +143,32 @@ LOGIN_URL = '/users/login/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'  # Gmail's SMTP server
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'b2a.org@gmail.com'
-EMAIL_HOST_PASSWORD = 'Dina2012#'
+EMAIL_USE_TLS = True  # Use TLS encryption
+EMAIL_HOST_USER = 'b2a.org@gmail.com'  # Replace with YOUR Gmail address
+EMAIL_HOST_PASSWORD = 'rkzw pxha tiyu pouk'  # Replace with the 16-character App Password
+
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ar', _('Arabic')),
+]
+
+LANGUAGE_CODE = 'en-us'  # Default language
+
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+AUTH_USER_MODEL = 'users.UserProfile'  # ✅ Replace with your actual app name
+
+
+STRIPE_PUBLIC_KEY = "pk_test_51QqdWG2ZflbGtyT0SypjT2eja1DStJVFLmQ5O1Qg0vYgnehojW9fe6Ow02VqxAO7OlEwNCDyuuPkjz4O9s6tLCFt009bk7axyA"
+STRIPE_SECRET_KEY = "sk_test_51QqdWG2ZflbGtyT0o3h2Ma2Ek0ub6tuCAh51bf6MtACWlV9Z9FbcoiJ0PZOOeQMVfdfc6jkB9cl6sGesG1AdwKbV009kmi6DET"

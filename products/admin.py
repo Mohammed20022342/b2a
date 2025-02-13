@@ -4,7 +4,11 @@ from .models import ContactMessage
 # Register your models here.
 from .models import Category, Product, Review
 
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "name_ar")
+    save_on_top = True  # Enables save buttons at the top
+
 admin.site.register(Product)
 admin.site.register(Review)
 

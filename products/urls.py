@@ -13,5 +13,10 @@ urlpatterns = [
     path('category/<int:category_id>/', views.product_by_category, name='product_by_category'),
     path('review/<int:product_id>/', views.add_review, name='add_review'),  # Add a review
     path('contact/', contact_us, name='contact'),
+    path('arabic/', views.arabic_product_list, name='arabic_product_list'),
+    path('arabic/product/<int:product_id>/', views.arabic_product_detail, name='arabic_product_detail'),
+    path('arabic/category/<int:category_id>/', views.arabic_product_by_category, name='arabic_product_by_category'),
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

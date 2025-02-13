@@ -379,6 +379,28 @@ footer a {
         transform: scaleX(1); /* Expand the search bar horizontally */
     }
 
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 products per row */
+        gap: 15px; /* Space between items */
+        padding: 20px;
+    }
+
+    .product-item .description {
+        display: none; /* Hide description on mobile */
+    }
+
+    .product-item a {
+        font-size: 0.8rem; /* Smaller button font size */
+        padding: 8px 12px; /* Adjust button padding */
+    }
+
+    .product-item a,
+    .products .product-item a {
+        font-size: 0.8rem; /* Adjust button font size */
+        padding: 8px 12px; /* Adjust button padding */
+    }
+
     
     /* Footer remains untouched but properly positioned */
     footer {

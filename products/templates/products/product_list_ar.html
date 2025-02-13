@@ -1,0 +1,125 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>الصفحة الرئيسية للتجارة الإلكترونية</title>
+</head>
+<body dir="rtl">
+
+    <header>
+        <div class="logo">
+            <a href="{% url 'product_list' %}"><img src="{% static 'img/b2apng.png' %}" alt="الشعار"></a>
+        </div>
+        <div class="search-bar">
+            <form method="get" action="{% url 'arabic_product_list' %}">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="ابحث عن المنتجات...">
+                <button type="submit">بحث</button>
+            </form>
+        </div>
+        
+        <i id='search-icon' class="fa fa-search search-icon"></i> <!-- أيقونة البحث -->
+
+        <div class="user-icons">
+            <a href="{% url 'profile_view' %}"><i class="fa-solid fa-user"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    زائر
+                {% endif %}
+            </a>
+            <a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+        <button class="hamburger">&#9776;</button> <!-- قائمة التنقل -->
+
+    </header>
+
+    <!-- القائمة الرئيسية -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'arabic_product_list' %}">الرئيسية</a></li>
+            {% for category in categories %}
+            <li><a href="{% url 'arabic_product_by_category' category_id=category.id %}" 
+                   class="{% if category.name == request.GET.category %}active{% endif %}">
+                   {{ category.name_ar }}
+            </a></li>
+            {% endfor %}
+            <li><a href="{% url 'contact' %}">التمويل</a></li>
+            <li><a href="{% url 'contact' %}">المشاريع</a></li>
+            <li><a href="{% url 'contact' %}">اتصل بنا</a></li>
+            <li><a href="{% url 'product_list' %}">English</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="offers">
+            <h2>عروض خاصة</h2>
+            <div class="offer-item">
+                <p>خصم 50% على المنتجات المحددة!</p>
+            </div>
+            <div class="offer-item">
+                <p>اشترِ واحدة واحصل على الأخرى مجانًا على جميع الإكسسوارات!</p>
+            </div>
+
+            <div class="offer-products-grid">
+                {% for product in products_on_offer %}
+                    <div class="product-item">
+                        <img src="{{ product.detail_image_1.url }}" alt="{{ product.title_ar }}">
+                        <h3>{{ product.title_ar }}</h3>
+                        <p class="description">{{ product.description_ar }}</p>
+                        <p>السعر: ${{ product.price }}</p>
+                        <a href="{% url 'arabic_product_detail' product_id=product.id %}">عرض المنتج</a>
+                    </div>
+                {% empty %}
+                    <p>لا توجد منتجات في العرض حاليًا.</p>
+                {% endfor %}
+            </div>
+
+        </section>
+
+        <div class="info-container">
+            <section class="info">
+                <h2>قواعد ومدة الشحن</h2>
+                <p>نوفر شحنًا مجانيًا للطلبات التي تزيد عن 50$.</p>
+                <p>يستغرق التوصيل العادي 3-5 أيام عمل.</p>
+            </section>
+            <span class="separator"></span>
+            <section class="price-adjustment">
+                <h2>تعديل الأسعار</h2>
+                <p>إذا وجدت سعرًا أقل خلال 30 يومًا، سنقوم بمطابقته!</p>
+            </section>
+        </div>
+
+        
+        <section class="products">
+            <h2>جميع المنتجات</h2>
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-item">
+                    <img src="{{ product.detail_image_1.url }}" alt="{{ product.title_ar }}">  
+                    <h3>{{ product.title_ar }}</h3>
+                    <p class="description">{{ product.description_ar }}</p>
+                    <p>السعر: ${{ product.price }}</p>
+                    <a href="{% url 'arabic_product_detail' product_id=product.id %}">عرض التفاصيل</a>
+                </div>
+                {% empty %}
+                <p>لا توجد منتجات متاحة حاليًا.</p>
+                {% endfor %}s
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 متجر التجارة الإلكترونية</p>
+        <p><a href="#">سياسة الخصوصية</a> | <a href="#">شروط الخدمة</a></p>
+    </footer>
+
+</body>
+<script src="{% static 'js/accounts.js' %}"></script>
+
+</html>

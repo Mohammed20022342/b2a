@@ -156,6 +156,27 @@ nav ul li a {
     background-color: #ba22a1;
 }
 
+.quantity-controls {
+    display: flex; /* Align buttons horizontally */
+    align-items: center; /* Vertically center the buttons */
+    gap: 10px; /* Space between buttons */
+}
+
+.quantity-controls button {
+    padding: 5px 10px; /* Adjust padding for better button size */
+    font-size: 1.2em; /* Adjust font size for better fit */
+    border: none;
+    background-color: #fe5757;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.quantity-controls button:disabled {
+    background-color: #ddd; /* Make disabled button look different */
+    cursor: not-allowed; /* Change cursor to indicate disabled state */
+}
+
 .cart-summary {
     background-color: white;
     padding: 20px;
@@ -323,7 +344,7 @@ footer a {
         color: white;
         text-align: center;
         padding: 15px 0;
-        position: relative;
+        position: absolute;
         bottom: 0;
         width: 100%;
     }

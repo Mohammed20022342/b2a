@@ -38,6 +38,8 @@ def cart_view(request):
         'items': cart_items,
         'total_price': total_price,
         'total_quantity': total_quantity,  # Pass the total quantity
+        'STRIPE_PUBLISHABLE_KEY': settings.STRIPE_PUBLIC_KEY  # Add this line
+
     }
     return render(request, 'cart/cart.html', context)
 
@@ -61,3 +63,62 @@ def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
     cart_item.delete()
     return redirect('cart_view')
+
+
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from .models import CartItem
+from .views import get_or_create_cart  # Import the existing function to get the cart
+
+stripe.api_key = settings.STRIPE_SECRET_KEY  # Your Stripe Secret Key
+
+def create_checkout_session(request):
+    try:
+        cart = get_or_create_cart(request)  # Get cart associated with the current session
+        cart_items = CartItem.objects.filter(cart=cart)  # Fetch items from cart
+
+        if not cart_items.exists():
+            return JsonResponse({'error': 'Your cart is empty!'})
+
+        # Convert cart items to Stripe's format
+        line_items = []
+        for item in cart_items:
+            line_items.append({
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {'name': item.product.title},
+                    'unit_amount': int(item.product.price * 100),  # Convert dollars to cents
+                },
+                'quantity': item.quantity,
+            })
+
+        # Create Stripe checkout session
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url="http://127.0.0.1:8000/cart/payment-success/",
+            cancel_url="http://127.0.0.1:8000/cart/payment-cancel/",
+        )
+
+        return JsonResponse({'id': session.id})
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
+    
+
+from django.shortcuts import render, redirect
+from .models import Cart, CartItem
+from .views import get_or_create_cart
+
+def payment_success(request):
+    cart = get_or_create_cart(request)  # Get the current user's cart
+    CartItem.objects.filter(cart=cart).delete()  # Remove all items from the cart
+
+    return render(request, 'cart/payment_success.html')  # Render success page
+
+
+def payment_cancel(request):
+    return render(request, "cart/payment_cancel.html")
